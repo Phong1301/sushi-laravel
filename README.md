@@ -29,3 +29,6 @@ Xin chào, để chạy source này cần phải:
 -   Tiến hành clear cache nếu cần thiết:
 
     -   php artisan config:cache
+    
+- Chức năng:
+    - Người dùng có thể đăng ký, đăng nhập, đăng xuất tài khoản của mình
