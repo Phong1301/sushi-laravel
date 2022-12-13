@@ -14,6 +14,8 @@
         <!--=============== CSS ===============-->
         <link rel="stylesheet" href="assets/css/styles.css">
         
+        <!--=============== CSRF ===============-->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>Sushi</title>
     </head>
@@ -40,6 +42,7 @@
         <script src="{{asset('assets/js/main.js')}}"></script>
         <script src="{{asset('assets/js/showerror.js')}}"></script>
 
+
         <!--=============== JQUERY ===============-->
         <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 
@@ -48,43 +51,44 @@
 
 
         <script>
-    
+            
+
             $(document).ready(function(){
 
                 // Show/hide login register
-                $("#register").hide();
+                $('#register').hide();
                 $('#forgotpassword').hide();
                 $('#resetpassword').hide();
 
-                $(".btn__register").click( ()=>{
-                    $("#login").hide();
-                    $("#register").show();
+                $('.btn__register').click( ()=>{
+                    $('#login').hide();
+                    $('#register').show();
                     $('#forgotpassword').hide();
                     $('#resetpassword').hide();
                 })
 
-                $(".btn__login").click( ()=>{
-                    $("#register").hide();
-                    $("#login").show();
+                $('.btn__login').click( ()=>{
+                    $('#register').hide();
+                    $('#login').show();
                     $('#forgotpassword').hide();
                     $('#resetpassword').hide();
                 })
 
                 $('.forgot-pass').click( ()=>{
                     $('#forgotpassword').show();
-                    $("#register").hide();
-                    $("#login").hide();
+                    $('#register').hide();
+                    $('#login').hide();
                     $('#resetpassword').hide();
                 })
                 
                 $('.btn__resset').click( ()=>{
                     $('#forgotpassword').hide();
-                    $("#register").hide();
-                    $("#login").hide();
+                    $('#register').hide();
+                    $('#login').hide();
                     $('#resetpassword').show();
                 })
 
-                $("#register_form").submit(function(e){
+                $('#register_form').submit(function(e){
                     e.preventDefault();
                     
                     $.ajax({
@@ -110,7 +114,7 @@
                     })
                 })
                 
-                $("#login_form").submit(function(e){
+                $('#login_form').submit(function(e){
                     e.preventDefault();
 
                     $.ajax({
@@ -143,6 +147,47 @@
                             }
                         }
                     });
+                })
+
+                $('.addToCartBtn').click( function(e){
+                    e.preventDefault();
+                    
+                    var product_id = $(this).closest('.popular__card').find('.prod_id').val();
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
+                    $.ajax({
+                        url: '{{ route('addProd') }}',
+                        method: 'post',
+                        data: {
+                            'product_id': product_id
+                        },
+                        success: function (res){
+                            if(res.status == 200){
+                                swal({
+                                    title: 'Success!',
+                                    text: res.messages,
+                                    icon: 'success',
+                                })
+                            }else if(res.status == 400){
+                                swal({
+                                    title: 'Error!',
+                                    text: res.messages,
+                                    icon: 'error',
+                                })
+                            }else if(res.status == 401){
+                                swal({
+                                    title: 'Error!',
+                                    text: res.messages,
+                                    icon: 'error',
+                                })
+                            }
+                        }
+                    })
                 })
             })
         </script>

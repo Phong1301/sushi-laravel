@@ -2,44 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Cart;
 use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FrontEndController extends Controller
 {
     function showHome(Request $request)
     {
-        return view('index');
-    }
+        $product = DB::table('products')->get();
 
-    function registerUser(Request $request)
-    {
-        // $request->validate(([
-        //     'name' => 'required',
-        //     'email' => 'required|email|unique:users',
-        //     'password' => 'required|min:5|max:12'
-        // ]));
-        // $user = new User();
-        // $user->name = $request->name;
-        // $user->email = $request->email;
-        // $user->password = $request->password;
-        // $res = $user->save();
-        // if ($res) {
-        //     return redirect('login')->with('success', 'Register Successfully');
-        // } else {
-        //     echo 'Lỗi';
-        // }
-        $user = User::where('email', $request['email'])->first();
+        $cartItems = Cart::where('user_id', session('loggedInUser'))->get();
 
-        if ($user) {
-            return response()->json(['exists' => 'Email already exists']);
-        } else {
-            $user = new User;
-            $user->name = $request['name'];
-            $user->email = $request['email'];
-            $user->password = bcrypt($request['password']);
-        }
-        $user->save();
-        return response()->json(['success' => 'User Registered Successfully']);
+        return view('index', compact('product', 'cartItems'));
     }
 }

@@ -35,49 +35,36 @@
         </div>
 
         <div class="nav__cart" id="nav-cart">
-            <div class="cart__item">
-                <img src="{{asset('assets/img/popular-onigiri.png')}}" class="cart__img" alt="">
-                
-                <div class="cart__text">
-                    <h3 class="cart__name">Onigiri</h3>
-                    <span class="cart__description">Japanese Dish</span>
-                    <span class="cart__price">$10.99</span>
-                    <div class="cart__action">
-                        <div class="cart__count">
-                            <div class="cart__count-button">-</div>
-                            <div class="cart__count-number">1</div>
-                            <div class="cart__count-button">+</div>
-                        </div>
-                        <div class="cart__remove">
-                            <i class="ri-delete-bin-line"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="cart__item">
-                <img src="{{asset('assets/img/popular-onigiri.png')}}" class="cart__img" alt="">
-                
-                <div class="cart__text">
-                    <h3 class="cart__name">Onigiri</h3>
-                    <span class="cart__description">Japanese Dish</span>
-                    <span class="cart__price">$10.99</span>
-                    <div class="cart__action">
-                        <div class="cart__count">
-                            <div class="cart__count-button">-</div>
-                            <div class="cart__count-number">1</div>
-                            <div class="cart__count-button">+</div>
-                        </div>
-                        <div class="cart__remove">
-                            <i class="ri-delete-bin-line"></i>
+            @if(session('loggedInUser'))
+            
+                @foreach ( $cartItems as $item )
+                    <div class="cart__item">
+                        <img src="{{ asset('assets/img/'. $item->products->image ) }}" class="cart__img" alt="">
+                        
+                        <div class="cart__text">
+                            <h3 class="cart__name">{{ $item->products->name }}</h3>
+                            <span class="cart__description">{{ $item->products->description }}</span>
+                            <span class="cart__price">${{ $item->products->price }}</span>
+                            <div class="cart__action">
+                                <div class="cart__count">
+                                    <div class="cart__count-button">-</div>
+                                    <div class="cart__count-number">{{ $item->prod_qty }}</div>
+                                    <div class="cart__count-button">+</div>
+                                </div>
+                                <div class="cart__remove">
+                                    <i class="ri-delete-bin-line"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                @endforeach
+                    
+            @endif
 
             <div class="cart__total">
                 <span class="cart__total-text">Total:</span>
-                <span class="cart__total-price">$20.99</span>
+                <span class="cart__total-price">3</span>
             </div>
 
             <div class="cart__checkout">
@@ -88,7 +75,7 @@
         <div class="nav__buttons">
 
             @if (session('loggedInUser'))
-                <div class="nav__icon">
+                <div class="nav__icon" id="icon-signin">
                     <a href="{{ route('logout') }}">Logout</a>
                 </div>
             @else

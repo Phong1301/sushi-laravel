@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FrontEndController;
@@ -24,6 +25,7 @@ if (App::environment('production')) {
 
 
 Route::get('/', [FrontEndController::class, 'showHome'])->name('home');
+Route::post('/add-to-cart', [CartController::class, 'addProduct'])->name('addProd');
 
 Route::post('/register', [UserController::class, 'register'])->name('register');
 Route::post('/login', [UserController::class, 'login'])->name('login');
